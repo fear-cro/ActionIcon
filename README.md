@@ -16,8 +16,8 @@ Current version: **0.1.1**
 ## Installation
 
 1. Exit World of Warcraft.
-2. Place the repository folder at `World of Warcraft\_forever_beta_\Interface\AddOns\ActionIcon`.
-3. Confirm that `ActionIcon.toc` is directly inside that folder.
+2. Copy the nested `ActionIcon` folder from this repository into `World of Warcraft\_forever_beta_\Interface\AddOns\`.
+3. Confirm the resulting path is `World of Warcraft\_forever_beta_\Interface\AddOns\ActionIcon\ActionIcon.toc`.
 4. Start the Forever beta and enable ActionIcon at the character-selection screen.
 
 ## Usage
