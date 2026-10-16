@@ -1,0 +1,11 @@
+## Interface: 16001
+## Title: ActionIcon
+## Notes: Lightweight spell-icon and macro return test environment for WoW Forever
+## Author: Robin
+## Version: 0.1.1
+## SavedVariables: ActionIconDB
+
+Data.lua
+Core.lua
+Display.lua
+UI.lua

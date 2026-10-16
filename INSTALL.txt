@@ -1,0 +1,4 @@
+Install the ActionIcon folder in World of Warcraft\_forever_beta_\Interface\AddOns\.
+
+Use /actionicon (or /ai), then open /macro and drag the character-specific
+ActionIconTest macro to an action bar. Full instructions are in README.txt.
