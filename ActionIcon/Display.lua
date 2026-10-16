@@ -113,6 +113,11 @@ function AI.SetDisplayEntry(entry, status)
     LayoutMini()
 end
 
+function AI.ClearMiniIcon()
+    miniTexture:Hide()
+    miniTexture:SetTexture(nil)
+end
+
 function AI.UpdateDisplayStatus(section, entry)
     if not AI.selected or AI.selected.entry ~= entry or AI.selected.section ~= section then return end
     AI.SetDisplayEntry(entry, AI.DisplayStatus(section, entry))

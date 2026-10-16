@@ -2,7 +2,7 @@
 local ADDON, AI = ...
 
 AI.ADDON = ADDON
-AI.VERSION = "0.1.3"
+AI.VERSION = "0.1.4"
 AI.MACRO_NAME = "ActionIconTest"
 AI.TEST_SECONDS = 2
 AI.results = {}
@@ -154,6 +154,7 @@ function AI.CompletePending(status)
     AI.pendingSerial = AI.pendingSerial + 1
     AI.results[pending.key] = status
     StatusChanged(pending.section, pending.entry)
+    if AI.ClearMiniIcon then AI.ClearMiniIcon() end
     return true
 end
 
