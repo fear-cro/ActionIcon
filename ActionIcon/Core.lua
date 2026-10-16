@@ -2,7 +2,7 @@
 local ADDON, AI = ...
 
 AI.ADDON = ADDON
-AI.VERSION = "0.1.1"
+AI.VERSION = "0.1.2"
 AI.MACRO_NAME = "ActionIconTest"
 AI.TEST_SECONDS = 2
 AI.results = {}
@@ -108,11 +108,11 @@ end
 
 local function MacroBody(entry)
     if not entry or entry.iconOnly then
-        return "#showtooltip\n/run ActionIcon_MacroSuccess()"
+        return "#showtooltip\n/aicallback"
     end
     local spellName = AI.GetSpellName(entry.id) or entry.name
     spellName = tostring(spellName or ""):gsub("[\r\n]", " ")
-    return "#showtooltip " .. spellName .. "\n/cast " .. spellName .. "\n/run ActionIcon_MacroSuccess()"
+    return "#showtooltip " .. spellName .. "\n/cast " .. spellName .. "\n/aicallback"
 end
 
 function AI.CreateOrUpdateMacro(entry, quiet)
@@ -201,7 +201,7 @@ function AI.BeginTest(entry, section, group)
     return true
 end
 
-function ActionIcon_MacroSuccess()
+function AI.HandleMacroReturn()
     if AI.CompletePending(SUCCESS) then
         AI.Print("a spell was successfully cast")
     else
@@ -327,6 +327,11 @@ end)
 
 SLASH_ACTIONICON1 = "/actionicon"
 SLASH_ACTIONICON2 = "/ai"
+SLASH_ACTIONICONRETURN1 = "/aicallback"
+SlashCmdList.ACTIONICONRETURN = function()
+    AI.HandleMacroReturn()
+end
+
 SlashCmdList.ACTIONICON = function(message)
     message = string.lower((message or ""):match("^%s*(.-)%s*$") or "")
     if message == "macro" then

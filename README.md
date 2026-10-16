@@ -1,6 +1,6 @@
 Author: fear_cro
 
-Create macro: `/run ActionIcon_MacroSuccess()`
+Create macro: `/aicallback`
 
 Drag the macro to the action bar.
 
