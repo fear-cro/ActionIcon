@@ -2,7 +2,7 @@
 local ADDON, AI = ...
 
 AI.ADDON = ADDON
-AI.VERSION = "0.1.2"
+AI.VERSION = "0.1.3"
 AI.MACRO_NAME = "ActionIconTest"
 AI.TEST_SECONDS = 2
 AI.results = {}
@@ -106,13 +106,8 @@ local function FindMacroIndex()
     end
 end
 
-local function MacroBody(entry)
-    if not entry or entry.iconOnly then
-        return "#showtooltip\n/aicallback"
-    end
-    local spellName = AI.GetSpellName(entry.id) or entry.name
-    spellName = tostring(spellName or ""):gsub("[\r\n]", " ")
-    return "#showtooltip " .. spellName .. "\n/cast " .. spellName .. "\n/aicallback"
+local function MacroBody()
+    return "/aicallback"
 end
 
 function AI.CreateOrUpdateMacro(entry, quiet)
@@ -124,7 +119,7 @@ function AI.CreateOrUpdateMacro(entry, quiet)
     end
 
     local index = FindMacroIndex()
-    local body = MacroBody(entry)
+    local body = MacroBody()
     local icon = entry and AI.EntryTexture(entry) or "INV_MISC_QUESTIONMARK"
     local ok, result
 

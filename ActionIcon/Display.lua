@@ -41,21 +41,31 @@ grip:SetPushedTexture("Interface\\ChatFrame\\UI-ChatIM-SizeGrabber-Down")
 grip:SetHighlightTexture("Interface\\ChatFrame\\UI-ChatIM-SizeGrabber-Highlight")
 
 local mini = CreateFrame("Frame", "ActionIconMiniFrame", UIParent)
-local miniTexture = mini:CreateTexture(nil, "ARTWORK")
+local miniTexture = mini:CreateTexture(nil, "OVERLAY")
 miniTexture:SetAllPoints(mini)
-miniTexture:SetTexCoord(0.08, 0.92, 0.08, 0.92)
 miniTexture:Hide()
 AI.miniFrame = mini
 AI.miniTexture = miniTexture
 
 local MINI_PX, MINI_X, MINI_Y = 18, 19, 7
-local miniHeight, miniScale, miniEffective = 0, 0, 0
+
+-- Preserve ActionLITE's sharp physical-pixel rendering if another addon hooks
+-- SetTexture and changes the texture's pixel-grid settings.
+local snapOn = miniTexture.IsSnappingToPixelGrid and miniTexture:IsSnappingToPixelGrid()
+local snapBias = miniTexture.GetTexelSnappingBias and miniTexture:GetTexelSnappingBias()
+local function SetSharpMiniTexture(path)
+    miniTexture:SetTexture(path)
+    if snapOn ~= nil and miniTexture.SetSnapToPixelGrid then miniTexture:SetSnapToPixelGrid(snapOn) end
+    if snapBias ~= nil and miniTexture.SetTexelSnappingBias then miniTexture:SetTexelSnappingBias(snapBias) end
+end
+
+local miniHeight, miniEffective, miniScale = 0, 0, 0
 
 local function LayoutMini(force)
     local factor = tonumber(ActionIconDB and ActionIconDB.miniScale) or 1
     factor = math.max(0.5, math.min(2, factor))
     if not GetPhysicalScreenSize then
-        if force or miniHeight == 0 or miniScale ~= factor then
+        if force or miniHeight == 0 or factor ~= miniScale then
             miniHeight, miniScale = -1, factor
             mini:SetSize(MINI_PX * factor, MINI_PX * factor)
             mini:ClearAllPoints()
@@ -67,9 +77,9 @@ local function LayoutMini(force)
     local _, physicalHeight = GetPhysicalScreenSize()
     local effective = UIParent:GetEffectiveScale()
     if type(physicalHeight) ~= "number" or physicalHeight <= 0 or type(effective) ~= "number" or effective <= 0 then return end
-    if not force and physicalHeight == miniHeight and factor == miniScale and effective == miniEffective then return end
+    if not force and physicalHeight == miniHeight and effective == miniEffective and factor == miniScale then return end
 
-    miniHeight, miniScale, miniEffective = physicalHeight, factor, effective
+    miniHeight, miniEffective, miniScale = physicalHeight, effective, factor
     local pixel = 768 / (physicalHeight * effective)
     mini:SetSize(MINI_PX * pixel * factor, MINI_PX * pixel * factor)
     mini:ClearAllPoints()
@@ -96,7 +106,7 @@ function AI.SetDisplayEntry(entry, status)
     local texture = AI.EntryTexture(entry)
     icon:SetTexture(texture or QUESTION)
     icon:SetVertexColor(1, 1, 1, 1)
-    miniTexture:SetTexture(texture or QUESTION)
+    SetSharpMiniTexture(texture or QUESTION)
     miniTexture:SetVertexColor(1, 1, 1, 1)
     miniTexture:SetShown(entry ~= nil and not (ActionIconDB and ActionIconDB.miniHidden))
     ApplyStatus(status)
