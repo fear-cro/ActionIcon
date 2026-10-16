@@ -1,3 +1,4 @@
+--Author: fear_cro
 local ADDON, AI = ...
 
 AI.Data = AI.Data or {}
